@@ -3,25 +3,25 @@ package me.glaremasters.uskyblockexpansion;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import us.talabrek.ultimateskyblock.api.uSkyBlockAPI;
 
 import java.text.DecimalFormat;
 
 public final class USkyBlockExpansion extends PlaceholderExpansion {
-
     private uSkyBlockAPI api;
-    private DecimalFormat level = new DecimalFormat("#.##");
+    private final DecimalFormat level = new DecimalFormat("#.##");
 
     private final String VERSION = getClass().getPackage().getImplementationVersion();
 
     @Override
     public boolean canRegister() {
-        return Bukkit.getPluginManager().getPlugin("uSkyBlock") != null;
+        return Bukkit.getPluginManager().getPlugin(getRequiredPlugin()) != null;
     }
 
     @Override
     public boolean register() {
-        api = (uSkyBlockAPI) Bukkit.getPluginManager().getPlugin(getPlugin());
+        api = (uSkyBlockAPI) Bukkit.getPluginManager().getPlugin(getRequiredPlugin());
         if (api != null) {
             return super.register();
         }
@@ -29,30 +29,30 @@ public final class USkyBlockExpansion extends PlaceholderExpansion {
     }
 
     @Override
-    public String getAuthor() {
+    public @NotNull String getAuthor() {
         return "Gianluca";
     }
 
     @Override
-    public String getPlugin() {
+    public String getRequiredPlugin() {
         return "uSkyBlock";
     }
 
     @Override
-    public String getIdentifier() {
+    public @NotNull String getIdentifier() {
         return "uskyblock";
     }
 
     @Override
-    public String getVersion() {
+    public @NotNull String getVersion() {
         return VERSION;
     }
 
     @Override
-    public String onPlaceholderRequest(Player player, String arg) {
+    public String onPlaceholderRequest(Player player, @NotNull String params) {
         if (player == null) return "";
 
-        switch(arg) {
+        switch (params) {
             case "island_level":
                 return String.valueOf(level.format(api.getIslandLevel(player)));
             case "island_rank":
@@ -60,6 +60,4 @@ public final class USkyBlockExpansion extends PlaceholderExpansion {
         }
         return "";
     }
-
 }
-
